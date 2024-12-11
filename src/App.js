@@ -70,7 +70,7 @@ const App1 = ()=>{
 
                         // const ret2 = runApi('http://localhost:3100/schema_settings',
                         const ret2 = runApi(
-                            {url: 'https://render3-mern-server.onrender.com/status'}
+                            {url: 'https://render3-mern-server.onrender.com/testfetch'}
                             // {url: 'https://localhost:4000/status'}
                         )
                         console.log('== ret2 ',ret2)
