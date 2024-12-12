@@ -41,6 +41,14 @@ const App1 = ()=>{
 
     useEffect(() => {
 
+        console.log("=== CREATE_GAME createGameInfo.error ",createGameInfo.error)
+        return () => {
+
+        };
+    }, [createGameInfo.error]);
+
+    useEffect(() => {
+
         console.log("=== CREATE_GAME createGameInfo.data ",createGameInfo.data)
         return () => {
 
@@ -111,10 +119,17 @@ const App1 = ()=>{
                     onClick={()=>{
 
                         createGameAdapter({ variables: {
-                                    title: "New game " + Date.now(),
-                                    platform: "platform 1 ",
-                                }}
-                        )
+                                "game": {
+                                    "title": "go1",
+                                    "platform": "go1",
+                                },
+                        }})
+
+                        // createGameAdapter({ variables: {
+                        //             title: "New game " + Date.now(),
+                        //             platform: "platform 1 ",
+                        //         }}
+                        // )
                         console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
 
                     }}
