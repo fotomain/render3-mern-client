@@ -17,8 +17,7 @@ const CREATE_GAME_GQL = gql`
 mutation createGameMutation($game: AddGameInput!){
   createGame(game: $game) {
     title
-    platform
-    id 
+    platform     
   }
 }
 
@@ -124,7 +123,7 @@ const App1 = ()=>{
                                 "game": {
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
-                                    "id": "111-222-333",
+                                    //"id": "111-222-333",
                                 },
                         }})
 
