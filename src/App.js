@@ -16,8 +16,8 @@ const CREATE_GAME_GQL = gql`
 
 mutation createGameMutation($game: AddGameInput!){
   createGame(game: $game) {
-    title,
-    platform,
+    title
+    platform
   }
 }
 
