@@ -29,6 +29,7 @@ const READ_GAMES_GQL = gql`
     games {
 
       title
+      platform
 
     }
   }
