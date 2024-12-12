@@ -122,7 +122,7 @@ const App1 = ()=>{
                         createGameAdapter({ variables: {
                                 "game": {
                                     "title": "New game "+Date.now(),
-                                    "platform": ["platform-"+Date.now()],
+                                    "platform": ["iOS","platform-"+Date.now()],
                                 },
                         }})
 
