@@ -1,8 +1,10 @@
 // npm start
 import React, {useEffect, useState} from "react";
 
-//npm i react-uuid
-import uuid from 'react-uuid'
+import uuid from "uuid";
+
+//npm i uuid
+
 
 
 import "./App.css";
@@ -14,7 +16,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 
 const CREATE_GAME_GQL = gql`
 
-mutation createGameMutation($game: AddGameInput!){
+mutation createGameMutation($game: ameInput!){
   createGame(game: $game) {
     id,
     title,
@@ -125,7 +127,8 @@ const App1 = ()=>{
                                 "game": {
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
-                                    "id": "111-222-333",
+                                    // "id": uuid.v4(),
+                                    // "id": "111-222-333",
                                 },
                         }})
 

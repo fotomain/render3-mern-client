@@ -7328,11 +7328,6 @@ react-scripts@5.0.0:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react-uuid@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/react-uuid/-/react-uuid-1.0.2.tgz"
-  integrity sha512-5e0GM16uuQj9MdRJlZ0GdLC8LKMwpU9PIqYmF27s3fIV2z+rLyASTaiW4aKzSY4DyGanz+ImzsECkftwGWfAwA==
-
 react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
@@ -8546,6 +8541,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
+
+uuid@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.npmjs.org/uuid/-/uuid-11.0.3.tgz"
+  integrity sha512-d0z310fCWv5dJwnX1Y/MncBAqGMKEzlBb1AOf7z9K8ALnd0utBX/msg/fA0+sbyN1ihbMsLhrBlnl1ak7Wa0rg==
 
 uuid@^8.3.2:
   version "8.3.2"
