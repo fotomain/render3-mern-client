@@ -6,7 +6,7 @@ import uuid from 'react-uuid'
 
 
 import "./App.css";
-import {ApolloClient, ApolloProvider, InMemoryCache, useMutation} from "@apollo/client";
+
 import {CREATE_CLIENT} from "./graphql/mutations/clientMutations";
 import {GET_CLIENTS} from "./graphql/queries/clientQueries";
 import { gql, useMutation, useQuery } from '@apollo/client';
@@ -37,13 +37,15 @@ const App1 = ()=>{
 
     // const [addTodo, { data, loading, error }] = useMutation(ADD_TODO);
 
-    // useEffect(() => {
-    //
-    //     console.log("=== GET_DOGS2 ",data)
-    //     return () => {
-    //
-    //     };
-    // }, [data]);
+    const getGamesResponse = useQuery(READ_GAMES_GQL);
+
+    useEffect(() => {
+
+        console.log("=== GET_GAMES 111 getGamesResponse.data ",getGamesResponse.data)
+        return () => {
+
+        };
+    }, [getGamesResponse.data]);
 
     const runApi = async  ({url = "", data = {}, mode="POST" }) => {
         console.log('=== data ',data)
@@ -100,8 +102,7 @@ const App1 = ()=>{
                 <button
                     onClick={()=>{
 
-                        const { loading, error, data } = useQuery(READ_GAMES_GQL);
-                        console.log("=== GET_DOGS1 ",data)
+                        console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
 
                     }}
                 > TEST SERVER games</button>
