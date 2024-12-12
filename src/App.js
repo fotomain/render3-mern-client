@@ -9,11 +9,22 @@ import "./App.css";
 import {ApolloClient, ApolloProvider, InMemoryCache, useMutation} from "@apollo/client";
 import {CREATE_CLIENT} from "./graphql/mutations/clientMutations";
 import {GET_CLIENTS} from "./graphql/queries/clientQueries";
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
-const GET_DOGS = gql`
 
-  query GetDogs {
+const CREATE_GAME_GQL = gql`
+
+mutation createGameMutation($game: AddGameInput!){
+  createGame(game: $game) {
+    id,
+    title
+  }
+}
+
+`;
+const READ_GAMES_GQL = gql`
+
+  query readGamesQuerry {
 
     games {
 
@@ -24,15 +35,15 @@ const GET_DOGS = gql`
 `;
 const App1 = ()=>{
 
-    const { loading, error, data } = useQuery(GET_DOGS);
-    console.log("=== GET_DOGS1 ",data)
-    useEffect(() => {
+    // const [addTodo, { data, loading, error }] = useMutation(ADD_TODO);
 
-        console.log("=== GET_DOGS2 ",data)
-        return () => {
-
-        };
-    }, [data]);
+    // useEffect(() => {
+    //
+    //     console.log("=== GET_DOGS2 ",data)
+    //     return () => {
+    //
+    //     };
+    // }, [data]);
 
     const runApi = async  ({url = "", data = {}, mode="POST" }) => {
         console.log('=== data ',data)
@@ -89,12 +100,10 @@ const App1 = ()=>{
                 <button
                     onClick={()=>{
 
-                        const ret2 = runApi(
-                            {url: 'https://render3-mern-server.onrender.com/testfetch'}
-                        )
-                        console.log('== ret2 ',ret2)
-                    }
-                    }
+                        const { loading, error, data } = useQuery(READ_GAMES_GQL);
+                        console.log("=== GET_DOGS1 ",data)
+
+                    }}
                 > TEST SERVER games</button>
                 </div>
 
