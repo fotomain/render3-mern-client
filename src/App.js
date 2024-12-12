@@ -134,7 +134,7 @@ const App1 = ()=>{
                                     // "id": "111-222-333",
                                 },
                             }
-                        console.log("=== variables ",variables)
+                        console.log("=== variables uuid4 ",variables)
                         createGameAdapter({ variables: variables })
 
                         console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
