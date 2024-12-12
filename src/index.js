@@ -43,7 +43,7 @@ const apolloClientGames = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
 
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={apolloClientGames}>
             <App />
       </ApolloProvider>
 
