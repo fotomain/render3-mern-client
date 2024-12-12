@@ -22,10 +22,12 @@ const apolloCache = new InMemoryCache({
     },
 });
 
+const localWork=false
 const apolloClient = new ApolloClient({
     // uri: 'https://render2-mern.onrender.com/api/v1/graphql',
     // uri: 'https://render2-mern.onrender.com/graphql',
-    uri: 'http://localhost:4000/graphql',
+    // uri: 'http://localhost:4000/graphql',
+    uri: (!localWork)?'https://render3-mern-client.netlify.app':'http://localhost:4000/graphql',
     cache: apolloCache,
     defaultOptions: {
         watchQuery: { fetchPolicy: "cache-and-network" },
