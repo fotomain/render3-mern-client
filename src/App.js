@@ -1,7 +1,7 @@
 // npm start
 import React, {useEffect, useState} from "react";
 
-import {v4 as uuid} from "uuid";
+import {v4 as uuid4} from "uuid";
 
 //npm i uuid
 
@@ -127,7 +127,7 @@ const App1 = ()=>{
                                 "game": {
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
-                                    "id": uuid(),
+                                    "id": uuid4(),
                                     // "id": "111-222-333",
                                 },
                         }})
