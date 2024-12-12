@@ -16,7 +16,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 
 const CREATE_GAME_GQL = gql`
 
-mutation createGameMutation($game: ameInput!){
+mutation createGameMutation($game: CreateGameInput!){
   createGame(game: $game) {
     id,
     title,
