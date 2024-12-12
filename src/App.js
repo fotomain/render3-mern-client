@@ -35,9 +35,17 @@ const READ_GAMES_GQL = gql`
 `;
 const App1 = ()=>{
 
-    // const [addTodo, { data, loading, error }] = useMutation(ADD_TODO);
+    const [createGameAdapter, createGameInfo] = useMutation(CREATE_GAME_GQL);
 
     const getGamesResponse = useQuery(READ_GAMES_GQL);
+
+    useEffect(() => {
+
+        console.log("=== CREATE_GAME createGameInfo.data ",createGameInfo.data)
+        return () => {
+
+        };
+    }, [createGameInfo.data]);
 
     useEffect(() => {
 
@@ -102,10 +110,15 @@ const App1 = ()=>{
                 <button
                     onClick={()=>{
 
+                        createGameAdapter({ variables: {
+                                    title: "New game " + Date.now(),
+                                    platform: "platform 1 ",
+                                }}
+                        )
                         console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
 
                     }}
-                > TEST SERVER games</button>
+                > TEST CREATE GAME </button>
                 </div>
 
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
