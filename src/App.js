@@ -18,6 +18,7 @@ mutation createGameMutation($game: AddGameInput!){
   createGame(game: $game) {
     title
     platform
+    id
   }
 }
 
@@ -121,6 +122,7 @@ const App1 = ()=>{
 
                         createGameAdapter({ variables: {
                                 "game": {
+                                    "id": "111-222-333",
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
                                 },
