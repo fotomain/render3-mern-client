@@ -123,14 +123,17 @@ const App1 = ()=>{
                 <button
                     onClick={()=>{
 
-                        createGameAdapter({ variables: {
+                        const variables =
+                            {
                                 "game": {
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
                                     "id": uuid4(),
                                     // "id": "111-222-333",
                                 },
-                        }})
+                            }
+                        console.log("=== variables ",variables)
+                        createGameAdapter({ variables: variables })
 
                         console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
 
