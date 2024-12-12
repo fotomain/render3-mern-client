@@ -36,7 +36,7 @@ const apolloClient = new ApolloClient({
 });
 
 const apolloClientGames = new ApolloClient({
-    uri: (!localWork)?'https://render3-mern-client.netlify.app':'http://localhost:4000/graphql',
+    uri: (!localWork)?'https://render3-mern-client.netlify.app/graphql':'http://localhost:4000/graphql',
     cache: new InMemoryCache(),
 });
 
