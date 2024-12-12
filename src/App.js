@@ -25,9 +25,10 @@ const GET_DOGS = gql`
 const App1 = ()=>{
 
     const { loading, error, data } = useQuery(GET_DOGS);
+    console.log("=== GET_DOGS1 ",data)
     useEffect(() => {
 
-        console.log("=== data ",data)
+        console.log("=== GET_DOGS2 ",data)
         return () => {
 
         };
