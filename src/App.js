@@ -1,5 +1,5 @@
 // npm start
-import React, {Component, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 //npm i react-uuid
 import uuid from 'react-uuid'
