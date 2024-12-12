@@ -1,5 +1,5 @@
 // npm start
-import React, {Component, useState} from "react";
+import React, {Component, useEffect, useState} from "react";
 
 //npm i react-uuid
 import uuid from 'react-uuid'
@@ -9,10 +9,29 @@ import "./App.css";
 import {ApolloClient, ApolloProvider, InMemoryCache, useMutation} from "@apollo/client";
 import {CREATE_CLIENT} from "./graphql/mutations/clientMutations";
 import {GET_CLIENTS} from "./graphql/queries/clientQueries";
+import { gql, useQuery } from '@apollo/client';
 
+const GET_DOGS = gql`
 
+  query GetDogs {
 
+    games {
+
+      title
+
+    }
+  }
+`;
 const App1 = ()=>{
+
+    const { loading, error, data } = useQuery(GET_DOGS);
+    useEffect(() => {
+
+        console.log("=== data ",data)
+        return () => {
+
+        };
+    }, [data]);
 
     const runApi = async  ({url = "", data = {}, mode="POST" }) => {
         console.log('=== data ',data)
@@ -65,6 +84,20 @@ const App1 = ()=>{
         <div className="App">
             <div className="App-column">
 
+                <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
+                <button
+                    onClick={()=>{
+
+                        const ret2 = runApi(
+                            {url: 'https://render3-mern-server.onrender.com/testfetch'}
+                        )
+                        console.log('== ret2 ',ret2)
+                    }
+                    }
+                > TEST SERVER games</button>
+                </div>
+
+                <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
                 <button
                     onClick={()=>{
 
@@ -75,7 +108,8 @@ const App1 = ()=>{
                         console.log('== ret2 ',ret2)
                     }
                     }
-                > TEST GAMES 1</button>
+                > TEST SERVER testfetch</button>
+                </div>
 
 
                 <div
