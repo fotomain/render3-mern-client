@@ -40,6 +40,7 @@ const apolloClientGames = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
+console.log("=== productionWork",productionWork)
 console.log("=== apolloClientGames",apolloClientGames)
 
 ReactDOM.render(
