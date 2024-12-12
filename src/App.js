@@ -129,6 +129,7 @@ const App1 = ()=>{
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
                                     "id": "",
+                                    // "id": "client-"+uuid4(),
                                     // "id": uuid4(),
                                     // "id": "111-222-333",
                                 },
