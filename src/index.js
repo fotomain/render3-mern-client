@@ -5,6 +5,7 @@ import App from './App';
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 // import reportWebVitals from './reportWebVitals';
 
+export const localWork=false
 const apolloCache1 = new InMemoryCache()
 
 const apolloCache = new InMemoryCache({
@@ -22,7 +23,7 @@ const apolloCache = new InMemoryCache({
     },
 });
 
-const localWork=false
+
 const apolloClient = new ApolloClient({
     // uri: 'https://render2-mern.onrender.com/api/v1/graphql',
     // uri: 'https://render2-mern.onrender.com/graphql',
@@ -32,6 +33,11 @@ const apolloClient = new ApolloClient({
     defaultOptions: {
         watchQuery: { fetchPolicy: "cache-and-network" },
     },
+});
+
+const apolloClientGames = new ApolloClient({
+    uri: (!localWork)?'https://render3-mern-client.netlify.app':'http://localhost:4000/graphql',
+    cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
