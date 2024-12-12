@@ -5,7 +5,7 @@ import App from './App';
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 // import reportWebVitals from './reportWebVitals';
 
-export const localWork=false
+export const productionWork=true
 const apolloCache1 = new InMemoryCache()
 
 const apolloCache = new InMemoryCache({
@@ -24,21 +24,23 @@ const apolloCache = new InMemoryCache({
 });
 
 
-const apolloClient = new ApolloClient({
-    // uri: 'https://render2-mern.onrender.com/api/v1/graphql',
-    // uri: 'https://render2-mern.onrender.com/graphql',
-    // uri: 'http://localhost:4000/graphql',
-    uri: (!localWork)?'https://render3-mern-client.netlify.app':'http://localhost:4000/graphql',
-    cache: apolloCache,
-    defaultOptions: {
-        watchQuery: { fetchPolicy: "cache-and-network" },
-    },
-});
+// const apolloClient = new ApolloClient({
+//     // uri: 'https://render2-mern.onrender.com/api/v1/graphql',
+//     // uri: 'https://render2-mern.onrender.com/graphql',
+//     // uri: 'http://localhost:4000/graphql',
+//     uri: (productionWork)?'https://render3-mern-client.netlify.app/graphql':'http://localhost:4000/graphql',
+//     cache: apolloCache,
+//     defaultOptions: {
+//         watchQuery: { fetchPolicy: "cache-and-network" },
+//     },
+// });
 
 const apolloClientGames = new ApolloClient({
-    uri: (!localWork)?'https://render3-mern-client.netlify.app/graphql':'http://localhost:4000/graphql',
+    uri: (productionWork)?'https://render3-mern-client.netlify.app/graphql':'http://localhost:4000/graphql',
     cache: new InMemoryCache(),
 });
+
+console.log("=== apolloClientGames",apolloClientGames)
 
 ReactDOM.render(
   <React.StrictMode>
