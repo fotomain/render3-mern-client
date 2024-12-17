@@ -9,7 +9,9 @@ import "./App.css";
 
 
 
-import {gql, useMutation, useQuery} from '@apollo/client';
+import {gql, useMutation, useQuery, useReactiveVar} from '@apollo/client';
+import DisplayCart from "./DisplayCart";
+import {setCartData} from "./apollo/cache";
 
 
 //st1-operation-define query + go to server to deleteGame definition and call
@@ -54,7 +56,8 @@ const READ_GAMES_GQL = gql`
       id
       title
       platform
-
+      isInCart  @client 
+      
     }
   }
 `;
@@ -101,9 +104,11 @@ const App1 = ()=>{
                 console.log("=== cacheLocal ",cacheLocal)
                 console.log("=== dataForUpdate.data ",dataForUpdate.data)
 
+                    var dataInCache=[]
                     const allDataNow =  cacheLocal.readQuery({ query: READ_GAMES_GQL });
                     console.log("=== allDataNow ",allDataNow)
-                    const { games:dataInCache } = allDataNow
+                        if( null!==allDataNow )
+                            dataInCache =  allDataNow.games
 
                         cacheLocal.writeQuery({
                             query: READ_GAMES_GQL,
@@ -176,6 +181,8 @@ const App1 = ()=>{
 
     }
 
+    const cartData = useReactiveVar(setCartData);
+
     // ====== sss+
     return (
 
@@ -183,6 +190,8 @@ const App1 = ()=>{
             <div className="App-column">
 
                 <div id="last_guid" style={{backgroundColor:'yellowgreen'}}>last_guid {state.last_guid}</div>
+
+                <DisplayCart/>
 
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
                 <button
@@ -244,6 +253,18 @@ const App1 = ()=>{
                                 }
                             >
                                 DELETE
+                            </button>
+                            <button
+                                onClick={()=>{
+                                    console.log('== Add to Cart ',el.id)
+                                    const indexInCart = cartData.indexOf(el.id)
+                                    console.log("=== indexInCart",indexInCart)
+                                    if(-1===indexInCart)
+                                        setCartData([el.id,...cartData])
+                                }
+                                }
+                            >
+                                Add to Cart
                             </button>
 
                         </div>

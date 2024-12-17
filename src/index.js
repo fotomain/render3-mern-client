@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+import {cacheGames} from "./apollo/cache";
 // import reportWebVitals from './reportWebVitals';
 
 export const productionWork=true
@@ -37,7 +38,7 @@ const apolloCache = new InMemoryCache({
 
 const apolloClientGames = new ApolloClient({
     uri: (productionWork)?'https://render3-mern-server.onrender.com/graphql':'http://localhost:4000/graphql',
-    cache: new InMemoryCache(),
+    cache: cacheGames
 });
 
 console.log("=== productionWork",productionWork)
