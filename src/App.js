@@ -7,12 +7,23 @@ import {v4 as uuid4} from "uuid";
 
 import "./App.css";
 
-import {CREATE_CLIENT} from "./graphql/mutations/clientMutations";
-import {GET_CLIENTS} from "./graphql/queries/clientQueries";
-import {disableExperimentalFragmentVariables, gql, useMutation, useQuery} from '@apollo/client';
+
+
+import {gql, useMutation, useQuery} from '@apollo/client';
 
 
 //st1-operation-define query + go to server to deleteGame definition and call
+const UPDATE_GAME_GQL = gql`
+
+mutation EditMutation($updateId: ID!,$newData: EditGameInput) {
+  updateGame(id: $updateId, edits: $newData) {
+    title,
+    platform
+  }
+}
+
+`;
+
 const DELETE_GAME_GQL = gql`
 
 mutation deleteGameMutation($idDelete: ID!){
@@ -54,17 +65,12 @@ const App1 = ()=>{
     });
 
     //st2-operation-define mutation
+    const [updateGameAdapter, updateGameInfo] = useMutation(UPDATE_GAME_GQL)
+
     const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL,{
             update(cacheLocal,dataForUpdate) {
                 console.log("=== cacheLocal ", cacheLocal)
                 console.log("=== dataForUpdate.data ", dataForUpdate.data)
-
-                // const allDataNow =  cacheLocal.readQuery({ query: READ_GAMES_GQL });
-                // console.log("=== allDataNow ",allDataNow)
-                //     const { games:dataInCache } = allDataNow
-                //         const gamesNEW = dataInCache.filter((g) => g.id !== dataForUpdate.data.deleteGame.id)
-                //
-                // console.log("=== gamesNEW ",gamesNEW)
 
                         cacheLocal.writeQuery({
                             query: READ_GAMES_GQL,
@@ -157,30 +163,7 @@ const App1 = ()=>{
 
     }
 
-
-    const [clientName, setClientName] = useState('Client'+Date.now());
-    const [clientEmail, setClientEmail] = useState("xx"+Date.now()+'email@email.com');
-    const [clientPhone, setClientPhone] = useState("+1 222333555");
-
-    const [addClient] = useMutation(
-        //s1-what to run
-        CREATE_CLIENT, {
-            //s2-new data
-            variables: { name:clientName, email:clientEmail, phone:clientPhone },
-                //s2-what to do with CACHE after update
-                update(cache, { data: { addClient } }) {
-                    const ret0 = cache.readQuery({ query: GET_CLIENTS });
-                    console.log("=== ret0",ret0)
-                    const { clients } = ret0
-
-                    cache.writeQuery({
-                        query: GET_CLIENTS,
-                        data: { clients: [...clients, addClient] },
-                    });
-                },
-    });
-
-
+    // ====== sss+
     return (
 
         <div className="App">
@@ -211,7 +194,6 @@ const App1 = ()=>{
                         console.log("=== variablesParameters  ",variablesParameters)
                         createGameAdapter({ variables: variablesParameters})
 
-
                         console.log("=== GET_GAMES 222 readGamesResponse.data ",readGamesResponse.data)
 
                     }}
@@ -224,7 +206,21 @@ const App1 = ()=>{
                     return <div style={{color:'blue'}} key={el.id}>
 
                         <div style={{flexDirection:'row'}} >
-                            {el.id} {el.title}
+                            {el.id}
+                            <input type="text" value={el.title} onChange={(e)=> {
+                                console.log('== UPDATE 1 GAME onChange= ', e.target.value)
+
+                                updateGameAdapter({
+                                    variables: {
+                                        updateId: el.id,
+                                        newData:{ "title":e.target.value,"platform":["newOS"]}
+                                        // ,platform:["platform-" + Date.now()]
+                                    }
+                                })
+
+                            }}
+                            />
+                            {/*{el.title}*/}
                             <button
                                 onClick={()=>{
                                     console.log('== DELETE 1 GAME ',el.id)
@@ -254,37 +250,6 @@ const App1 = ()=>{
                 >
                     TEST SERVER testfetch
                 </button>
-                </div>
-
-
-                <div
-                    style={{width:'130px', height:'50px',
-                        display:'flex',
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        backgroundColor:'red'}}>
-
-                    <button
-                        onClick={()=>{
-
-                            console.log(clientName)
-                            console.log(clientEmail)
-                            console.log(clientPhone)
-
-                            addClient();
-                            // addClient(name, email, phone);
-
-                            // // const ret2 = runApi('http://localhost:3100/mognodb_settings',
-                            // const ret2 = runApi(
-                            //     {url: 'https://render2-mern.onrender.com/api/v1/books'},
-                            // )
-                            // console.log('== ret2 ',ret2)
-                        }
-                        }
-                    >
-                        CREATE CLIENT
-                    </button>
-
                 </div>
 
                 <div
