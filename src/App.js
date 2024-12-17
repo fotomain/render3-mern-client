@@ -54,7 +54,27 @@ const App1 = ()=>{
     });
 
     //st2-operation-define mutation
-    const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL)
+    const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL,{
+            update(cacheLocal,dataForUpdate) {
+                console.log("=== cacheLocal ", cacheLocal)
+                console.log("=== dataForUpdate.data ", dataForUpdate.data)
+
+                // const allDataNow =  cacheLocal.readQuery({ query: READ_GAMES_GQL });
+                // console.log("=== allDataNow ",allDataNow)
+                //     const { games:dataInCache } = allDataNow
+                //         const gamesNEW = dataInCache.filter((g) => g.id !== dataForUpdate.data.deleteGame.id)
+                //
+                // console.log("=== gamesNEW ",gamesNEW)
+
+                        cacheLocal.writeQuery({
+                            query: READ_GAMES_GQL,
+                            data: { games: dataForUpdate.data },
+                        });
+
+                console.log("=== deleteGame OK ")
+
+            }
+        })
 
     const [createGameAdapter, createGameInfo] = useMutation(CREATE_GAME_GQL,
         {
@@ -195,7 +215,9 @@ const App1 = ()=>{
                         console.log("=== GET_GAMES 222 readGamesResponse.data ",readGamesResponse.data)
 
                     }}
-                > CREATE GAME </button>
+                >
+                    CREATE GAME
+                </button>
                 </div>
 
                 {readGamesResponse?.data?.games && readGamesResponse.data.games.map((el,ii)=>{
@@ -209,7 +231,9 @@ const App1 = ()=>{
                                     deleteGameAdapter({ variables: {idDelete:el.id}})
                                 }
                                 }
-                            > DELETE </button>
+                            >
+                                DELETE
+                            </button>
 
                         </div>
 
@@ -227,7 +251,9 @@ const App1 = ()=>{
                         console.log('== ret2 ',ret2)
                     }
                     }
-                > TEST SERVER testfetch</button>
+                >
+                    TEST SERVER testfetch
+                </button>
                 </div>
 
 
@@ -255,7 +281,9 @@ const App1 = ()=>{
                             // console.log('== ret2 ',ret2)
                         }
                         }
-                    > CREATE CLIENT </button>
+                    >
+                        CREATE CLIENT
+                    </button>
 
                 </div>
 
@@ -276,7 +304,9 @@ const App1 = ()=>{
                             console.log('== ret2 ',ret2)
                         }
                         }
-                    > TEST mongoDB</button>
+                    >
+                        TEST mongoDB
+                    </button>
 
                 </div>
 
@@ -297,7 +327,9 @@ const App1 = ()=>{
                             console.log('== ret2 ',ret2)
                         }
                         }
-                    > TEST schema</button>
+                    >
+                        TEST schema
+                    </button>
 
                 </div>
 
