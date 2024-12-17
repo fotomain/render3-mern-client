@@ -5,13 +5,11 @@ import {v4 as uuid4} from "uuid";
 
 //npm i uuid
 
-
-
 import "./App.css";
 
 import {CREATE_CLIENT} from "./graphql/mutations/clientMutations";
 import {GET_CLIENTS} from "./graphql/queries/clientQueries";
-import { gql, useMutation, useQuery } from '@apollo/client';
+import {disableExperimentalFragmentVariables, gql, useMutation, useQuery} from '@apollo/client';
 
 
 const CREATE_GAME_GQL = gql`
@@ -23,8 +21,9 @@ mutation createGameMutation($game: CreateGameInput!){
     platform,         
   }
 }
-
 `;
+
+
 const READ_GAMES_GQL = gql`
 
   query readGamesQuerry {
@@ -40,9 +39,39 @@ const READ_GAMES_GQL = gql`
 `;
 const App1 = ()=>{
 
-    const [createGameAdapter, createGameInfo] = useMutation(CREATE_GAME_GQL);
+    const [state, setState] = useState({
+        last_guid:'',
+    });
 
-    const getGamesResponse = useQuery(READ_GAMES_GQL);
+    const [createGameAdapter, createGameInfo] = useMutation(CREATE_GAME_GQL,
+        {
+            update(cacheLocal,dataForUpdate){
+                console.log("=== cacheLocal ",cacheLocal)
+                console.log("=== dataForUpdate.data ",dataForUpdate.data)
+
+                    const allDataNow =  cacheLocal.readQuery({ query: READ_GAMES_GQL });
+                    console.log("=== allDataNow ",allDataNow)
+                    const { games:dataInCache } = allDataNow
+
+                        cacheLocal.writeQuery({
+                            query: READ_GAMES_GQL,
+                            data: { games: [...dataInCache, dataForUpdate.data.createGame] },
+                        });
+
+                console.log("=== createGame OK ")
+                // freshData
+            }
+        });
+
+    const readGamesResponse = useQuery(READ_GAMES_GQL);
+
+    useEffect(() => {
+
+        console.log("=== last_guid ",state.last_guid)
+        return () => {
+
+        };
+    }, [state.last_guid]);
 
     useEffect(() => {
 
@@ -62,11 +91,11 @@ const App1 = ()=>{
 
     useEffect(() => {
 
-        console.log("=== GET_GAMES 111 getGamesResponse.data ",getGamesResponse.data)
+        console.log("=== GET_GAMES 111 readGamesResponse.data ",readGamesResponse.data)
         return () => {
 
         };
-    }, [getGamesResponse.data]);
+    }, [readGamesResponse.data]);
 
     const runApi = async  ({url = "", data = {}, mode="POST" }) => {
         console.log('=== data ',data)
@@ -95,22 +124,27 @@ const App1 = ()=>{
 
     }
 
+
     const [clientName, setClientName] = useState('Client'+Date.now());
     const [clientEmail, setClientEmail] = useState("xx"+Date.now()+'email@email.com');
     const [clientPhone, setClientPhone] = useState("+1 222333555");
 
-    const [addClient] = useMutation(CREATE_CLIENT, {
-        variables: { name:clientName, email:clientEmail, phone:clientPhone },
-        update(cache, { data: { addClient } }) {
-            const ret0 = cache.readQuery({ query: GET_CLIENTS });
-            console.log("=== ret0",ret0)
-            const { clients } = ret0
+    const [addClient] = useMutation(
+        //s1-what to run
+        CREATE_CLIENT, {
+            //s2-new data
+            variables: { name:clientName, email:clientEmail, phone:clientPhone },
+                //s2-what to do with CACHE after update
+                update(cache, { data: { addClient } }) {
+                    const ret0 = cache.readQuery({ query: GET_CLIENTS });
+                    console.log("=== ret0",ret0)
+                    const { clients } = ret0
 
-            cache.writeQuery({
-                query: GET_CLIENTS,
-                data: { clients: [...clients, addClient] },
-            });
-        },
+                    cache.writeQuery({
+                        query: GET_CLIENTS,
+                        data: { clients: [...clients, addClient] },
+                    });
+                },
     });
 
 
@@ -119,29 +153,40 @@ const App1 = ()=>{
         <div className="App">
             <div className="App-column">
 
+                <div id="last_guid" style={{backgroundColor:'yellowgreen'}}>last_guid {state.last_guid}</div>
+
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
                 <button
                     onClick={()=>{
 
-                        const variables =
+                        const _guid=uuid4()
+                        setState((prevState)=> { return {...prevState,
+                            last_guid:_guid
+                        }})
+
+                        const variablesParameters =
                             {
                                 "game": {
                                     "title": "New game "+Date.now(),
                                     "platform": ["iOS","platform-"+Date.now()],
-                                    "id": uuid4(),
+                                    "id": _guid,
                                     // "id": "",
                                     // "id": "client-"+uuid4(),
                                     // "id": "111-222-333",
                                 },
                             }
-                        console.log("=== variables uuid4 ",variables)
-                        createGameAdapter({ variables: variables })
+                        console.log("=== variablesParameters  ",variablesParameters)
+                        createGameAdapter({ variables: variablesParameters})
 
-                        console.log("=== GET_GAMES 222 getGamesResponse.data ",getGamesResponse.data)
+                        console.log("=== GET_GAMES 222 readGamesResponse.data ",readGamesResponse.data)
 
                     }}
-                > TEST CREATE GAME </button>
+                > CREATE GAME </button>
                 </div>
+
+                {readGamesResponse?.data?.games && readGamesResponse.data.games.map((el,ii)=>{
+                    return <div key={el.id}>{el.title}</div>
+                })}
 
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
                 <button
