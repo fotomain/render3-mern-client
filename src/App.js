@@ -12,6 +12,16 @@ import {GET_CLIENTS} from "./graphql/queries/clientQueries";
 import {disableExperimentalFragmentVariables, gql, useMutation, useQuery} from '@apollo/client';
 
 
+//st1-operation-define query + go to server to deleteGame definition and call
+const DELETE_GAME_GQL = gql`
+
+mutation deleteGameMutation($idDelete: ID!){
+  deleteGame(id: $idDelete) {
+    id
+  }
+}
+`;
+
 const CREATE_GAME_GQL = gql`
 
 mutation createGameMutation($game: CreateGameInput!){
@@ -42,6 +52,9 @@ const App1 = ()=>{
     const [state, setState] = useState({
         last_guid:'',
     });
+
+    //st2-operation-define mutation
+    const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL)
 
     const [createGameAdapter, createGameInfo] = useMutation(CREATE_GAME_GQL,
         {
@@ -178,6 +191,7 @@ const App1 = ()=>{
                         console.log("=== variablesParameters  ",variablesParameters)
                         createGameAdapter({ variables: variablesParameters})
 
+
                         console.log("=== GET_GAMES 222 readGamesResponse.data ",readGamesResponse.data)
 
                     }}
@@ -185,7 +199,21 @@ const App1 = ()=>{
                 </div>
 
                 {readGamesResponse?.data?.games && readGamesResponse.data.games.map((el,ii)=>{
-                    return <div key={el.id}>{el.title}</div>
+                    return <div style={{color:'blue'}} key={el.id}>
+
+                        <div style={{flexDirection:'row'}} >
+                            {el.id} {el.title}
+                            <button
+                                onClick={()=>{
+                                    console.log('== DELETE 1 GAME ',el.id)
+                                    deleteGameAdapter({ variables: {idDelete:el.id}})
+                                }
+                                }
+                            > DELETE </button>
+
+                        </div>
+
+                    </div>
                 })}
 
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
