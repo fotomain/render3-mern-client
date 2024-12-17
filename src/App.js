@@ -15,7 +15,7 @@ import {gql, useMutation, useQuery} from '@apollo/client';
 //st1-operation-define query + go to server to deleteGame definition and call
 const UPDATE_GAME_GQL = gql`
 
-mutation EditMutation($updateId: ID!,$newData: EditGameInput) {
+mutation EditMutation($updateId: ID!,$newData: UpdateGameInput) {
   updateGame(id: $updateId, edits: $newData) {
     title,
     platform
@@ -65,7 +65,20 @@ const App1 = ()=>{
     });
 
     //st2-operation-define mutation
-    const [updateGameAdapter, updateGameInfo] = useMutation(UPDATE_GAME_GQL)
+    const [updateGameAdapter, updateGameInfo] = useMutation(UPDATE_GAME_GQL,{
+        update(cacheLocal,dataForUpdate) {
+            console.log("=== cacheLocal ", cacheLocal)
+            console.log("=== dataForUpdate.data ", dataForUpdate.data)
+
+            cacheLocal.writeQuery({
+                query: READ_GAMES_GQL,
+                data: { games: dataForUpdate.data.updateGame },
+            });
+
+            console.log("=== updateGame OK ")
+
+        }
+    })
 
     const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL,{
             update(cacheLocal,dataForUpdate) {
@@ -213,8 +226,10 @@ const App1 = ()=>{
                                 updateGameAdapter({
                                     variables: {
                                         updateId: el.id,
-                                        newData:{ "title":e.target.value,"platform":["newOS"]}
-                                        // ,platform:["platform-" + Date.now()]
+                                        newData:{
+                                            title:e.target.value,
+                                            platform:["newOS"]
+                                        }
                                     }
                                 })
 
