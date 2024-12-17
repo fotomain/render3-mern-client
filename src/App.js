@@ -11,7 +11,13 @@ import "./App.css";
 
 import {gql, useMutation, useQuery, useReactiveVar} from '@apollo/client';
 import DisplayCart from "./DisplayCart";
-import {setCartData} from "./apollo/cache";
+import {cartItemsVar, setCartData} from "./apollo/cache";
+
+export const GET_CART_ITEMS = gql`
+      query GetCartItems {
+        cartItems @client
+      }
+    `;
 
 
 //st1-operation-define query + go to server to deleteGame definition and call
@@ -183,6 +189,9 @@ const App1 = ()=>{
 
     const cartData = useReactiveVar(setCartData);
 
+    // st4-cartItems
+    const readCartItemsResponse = useQuery(GET_CART_ITEMS);
+    console.log("=== readCartItemsResponse ",readCartItemsResponse?.data?.cartItems)
     // ====== sss+
     return (
 
@@ -190,6 +199,7 @@ const App1 = ()=>{
             <div className="App-column">
 
                 <div id="last_guid" style={{backgroundColor:'yellowgreen'}}>last_guid {state.last_guid}</div>
+                <div id="last_guid" style={{backgroundColor:'yellowgreen'}}>readCartItemsResponse {JSON.stringify(readCartItemsResponse.data)}</div>
 
                 <DisplayCart/>
 
@@ -254,19 +264,45 @@ const App1 = ()=>{
                             >
                                 DELETE
                             </button>
-                            <button
-                                onClick={()=>{
-                                    console.log('== Add to Cart ',el.id)
-                                    const indexInCart = cartData.indexOf(el.id)
-                                    console.log("=== indexInCart",indexInCart)
-                                    if(-1===indexInCart)
-                                        setCartData([el.id,...cartData])
-                                }
-                                }
-                            >
-                                Add to Cart
-                            </button>
 
+                            {/*{el.isInCart?<div>X</div>*/}
+                            {readCartItemsResponse?.data?.cartItems && -1!==readCartItemsResponse?.data?.cartItems?.indexOf(el.id)
+                                ?<button
+                                    onClick={()=>{
+                                        console.log('== Delete from Cart ',el.id)
+                                        const indexInCart = cartData.indexOf(el.id)
+                                        console.log("=== indexInCart",indexInCart)
+                                        if(-1!==indexInCart) {
+                                            const newData1 = cartData.filter(arrEl => el.id === arrEl.id )
+                                            setCartData([...newData1])
+                                            // st3-cartItems
+                                            var newData2 = cartItemsVar()
+                                            newData2 = newData2.filter(arrEl => el.id === arrEl.id )
+                                            cartItemsVar([...newData2])
+                                        }
+                                    }
+                                    }
+                                >
+                                    X from Cart
+                                </button>
+
+                                :
+                                <button
+                                    onClick={()=>{
+                                        console.log('== Add to Cart ',el.id)
+                                        const indexInCart = cartData.indexOf(el.id)
+                                        console.log("=== indexInCart",indexInCart)
+                                        if(-1===indexInCart) {
+                                            setCartData([...cartData,el.id])
+                                            // st3-cartItems
+                                            cartItemsVar([...cartItemsVar(),el.id])
+                                        }
+                                    }
+                                    }
+                                >
+                                    Add to Cart
+                                </button>
+                            }
                         </div>
 
                     </div>
