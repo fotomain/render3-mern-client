@@ -105,7 +105,7 @@ const App1 = ()=>{
                 data: { games: dataForUpdate.data.updateGame },
             });
 
-            console.log("=== updateGame OK ")
+            console.log("=== updateGame OK")
 
         }
     })
@@ -148,9 +148,11 @@ const App1 = ()=>{
         });
 
     const readGamesResponse = useQuery(READ_GAMES_GQL);
+    if(readGamesResponse.error)
+        console.log("===  readGamesResponse.error ",readGamesResponse.error)
     const readGamesAndAuthorsResponse = useQuery(GET_GAMES_AND_AUTHORS);
     if(readGamesAndAuthorsResponse.error)
-        console.log("===  readGamesAndAuthorsResponse",readGamesAndAuthorsResponse.error)
+        console.log("===  readGamesAndAuthorsResponse.error ",readGamesAndAuthorsResponse.error)
 
     useEffect(() => {
 
@@ -262,7 +264,10 @@ const App1 = ()=>{
                     return <div style={{color:'blue'}} key={el.id}>
 
                         <div style={{flexDirection:'row'}} >
-                            {el.id}
+
+                            <div>{el.id}</div>
+                            <div>{JSON.stringify(el.platform)}</div>
+
                             <input type="text" value={el.title} onChange={(e)=> {
                                 console.log('== UPDATE 1 GAME onChange= ', e.target.value)
 
@@ -271,7 +276,7 @@ const App1 = ()=>{
                                         updateId: el.id,
                                         newData:{
                                             title:e.target.value,
-                                            platform:["newOS"]
+                                            platform:["Android"]
                                         }
                                     }
                                 })
