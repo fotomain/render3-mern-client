@@ -25,16 +25,6 @@ const apolloCache = new InMemoryCache({
 });
 
 
-// const apolloClient = new ApolloClient({
-//     // uri: 'https://render2-mern.onrender.com/api/v1/graphql',
-//     // uri: 'https://render2-mern.onrender.com/graphql',
-//     // uri: 'http://localhost:4000/graphql',
-//     uri: (productionWork)?'https://render3-mern-client.netlify.app/graphql':'http://localhost:4000/graphql',
-//     cache: apolloCache,
-//     defaultOptions: {
-//         watchQuery: { fetchPolicy: "cache-and-network" },
-//     },
-// });
 
 const apolloClientGames = new ApolloClient({
     uri: (productionWork)?'https://render3-mern-server.onrender.com/graphql':'http://localhost:4000/graphql',
