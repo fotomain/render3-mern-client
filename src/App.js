@@ -292,16 +292,29 @@ const App1 = ()=>{
                             {/*{el.isInCart?<div>X</div>*/}
                             {readCartItemsResponse?.data?.cartItems && -1!==readCartItemsResponse?.data?.cartItems?.indexOf(el.id)
                                 ?<button
+                                    style={{backgroundColor:'lightpink'}}
                                     onClick={()=>{
                                         console.log('== Delete from Cart ',el.id)
                                         const indexInCart = cartData.indexOf(el.id)
                                         console.log("=== indexInCart",indexInCart)
                                         if(-1!==indexInCart) {
-                                            const newData1 = cartData.filter(arrEl => el.id === arrEl.id )
+                                            var newData1 = cartData.filter(arrEl => el.id !== arrEl.id )
+                                            const indexDelete1 = newData1.indexOf(el.id)
+                                                if(-1<indexDelete1)
+                                                {
+                                                    newData1.splice(indexDelete1,1)
+                                                }
                                             setCartData([...newData1])
+
                                             // st3-cartItems
                                             var newData2 = cartItemsVar()
-                                            newData2 = newData2.filter(arrEl => el.id === arrEl.id )
+                                            console.log("=== newData2 before",newData2)
+                                            const indexDelete2 = newData2.indexOf(el.id)
+                                                if(-1<indexDelete2)
+                                                {
+                                                    newData2.splice(indexDelete2,1)
+                                                }
+                                            console.log("=== newData2 filtered",newData2)
                                             cartItemsVar([...newData2])
                                         }
                                     }
@@ -312,6 +325,7 @@ const App1 = ()=>{
 
                                 :
                                 <button
+                                    style={{backgroundColor:'lightgreen'}}
                                     onClick={()=>{
                                         console.log('== Add to Cart ',el.id)
                                         const indexInCart = cartData.indexOf(el.id)
