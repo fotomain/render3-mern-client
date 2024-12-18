@@ -13,6 +13,27 @@ import {gql, useMutation, useQuery, useReactiveVar} from '@apollo/client';
 import DisplayCart from "./DisplayCart";
 import {cartItemsVar, setCartData} from "./apollo/cache";
 
+const GET_GAMES_AND_AUTHORS = gql`
+
+  query readGamesAndAuthors {
+
+    games {
+      id
+      title
+      platform
+    }
+    
+    authors {
+      id
+      name
+      verified
+    }
+    
+    
+  }
+
+  `;
+
 export const GET_CART_ITEMS = gql`
       query GetCartItems {
         cartItems @client
@@ -127,6 +148,9 @@ const App1 = ()=>{
         });
 
     const readGamesResponse = useQuery(READ_GAMES_GQL);
+    const readGamesAndAuthorsResponse = useQuery(GET_GAMES_AND_AUTHORS);
+    if(readGamesAndAuthorsResponse.error)
+        console.log("===  readGamesAndAuthorsResponse",readGamesAndAuthorsResponse.error)
 
     useEffect(() => {
 
@@ -307,6 +331,16 @@ const App1 = ()=>{
 
                     </div>
                 })}
+
+                <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
+                    <button
+                        onClick={()=>{
+                            console.log('== readGamesAndAuthorsResponse.data ',readGamesAndAuthorsResponse.data)
+                        }}
+                    >
+                        READ Games and Authors
+                    </button>
+                </div>
 
                 <div style={{width:'130px', height:'50px', display:'flex', flexDirection:'row', justifyContent:'center', backgroundColor:'red'}}>
                 <button
