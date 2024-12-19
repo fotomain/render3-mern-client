@@ -12,6 +12,7 @@ import "./App.css";
 import {gql, useMutation, useQuery, useReactiveVar} from '@apollo/client';
 import DisplayCart from "./DisplayCart";
 import {cartItemsVar, setCartData} from "./apollo/cache";
+import InputField from "./InputField";
 
 const GET_GAMES_AND_AUTHORS = gql`
 
@@ -46,6 +47,7 @@ const UPDATE_GAME_GQL = gql`
 
 mutation EditMutation($updateId: ID!,$newData: UpdateGameInput) {
   updateGame(id: $updateId, edits: $newData) {
+    id,
     title,
     platform
   }
@@ -98,11 +100,10 @@ const App1 = ()=>{
     const [updateGameAdapter, updateGameInfo] = useMutation(UPDATE_GAME_GQL,{
         update(cacheLocal,dataForUpdate) {
             console.log("=== cacheLocal ", cacheLocal)
-            console.log("=== dataForUpdate.data ", dataForUpdate.data)
+            console.log("=== dataForUpdate.data-update ", dataForUpdate.data)
 
             cacheLocal.writeQuery({
                 query: READ_GAMES_GQL,
-                data: { games: dataForUpdate.data.updateGame },
             });
 
             console.log("=== updateGame OK")
@@ -113,7 +114,7 @@ const App1 = ()=>{
     const [deleteGameAdapter, deleteGameInfo] = useMutation(DELETE_GAME_GQL,{
             update(cacheLocal,dataForUpdate) {
                 console.log("=== cacheLocal ", cacheLocal)
-                console.log("=== dataForUpdate.data ", dataForUpdate.data)
+                console.log("=== dataForUpdate.data-delete ", dataForUpdate.data)
 
                         cacheLocal.writeQuery({
                             query: READ_GAMES_GQL,
@@ -129,7 +130,7 @@ const App1 = ()=>{
         {
             update(cacheLocal,dataForUpdate){
                 console.log("=== cacheLocal ",cacheLocal)
-                console.log("=== dataForUpdate.data ",dataForUpdate.data)
+                console.log("=== dataForUpdate.data-create ",dataForUpdate.data)
 
                     var dataInCache=[]
                     const allDataNow =  cacheLocal.readQuery({ query: READ_GAMES_GQL });
@@ -260,7 +261,10 @@ const App1 = ()=>{
                 </button>
                 </div>
 
-                {readGamesResponse?.data?.games && readGamesResponse.data.games.map((el,ii)=>{
+
+
+                {Array.isArray(readGamesResponse?.data?.games) && readGamesResponse.data.games.map((el,ii)=>{
+
                     return <div style={{color:'blue'}} key={el.id}>
 
                         <div style={{flexDirection:'row'}} >
@@ -268,22 +272,24 @@ const App1 = ()=>{
                             <div>{el.id}</div>
                             <div>{JSON.stringify(el.platform)}</div>
 
-                            <input type="text" value={el.title} onChange={(e)=> {
-                                console.log('== UPDATE 1 GAME onChange= ', e.target.value)
-
-                                updateGameAdapter({
-                                    variables: {
-                                        updateId: el.id,
-                                        newData:{
-                                            title:e.target.value,
-                                            platform:["Android"]
+                            <InputField
+                                value={el.title}
+                                id={el.id}
+                                onChangeValue={(params)=>{
+                                    console.log("=== updateId: ",params.id)
+                                    updateGameAdapter({
+                                        variables: {
+                                            updateId: params.id,
+                                            newData:{
+                                                id:params.id,
+                                                title:params.newValue,
+                                                platform:["Android"]
+                                            }
                                         }
-                                    }
-                                })
+                                    })
 
-                            }}
+                                }}
                             />
-                            {/*{el.title}*/}
                             <button
                                 onClick={()=>{
                                     console.log('== DELETE 1 GAME ',el.id)
